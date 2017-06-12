@@ -12,7 +12,7 @@ from django.conf import settings
 
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
-    photo = models.ImageField(blank=True)
+    photo = models.ImageField(upload_to='post', blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now_add=True)
     like_users = models.ManyToManyField(
@@ -20,7 +20,10 @@ class Post(models.Model):
         related_name='like_posts',
         through='PostLike',
     )
-    tags = models.ManyToManyField('Tag')
+    tags = models.ManyToManyField(
+        'Tag',
+        blank=True
+    )
 
     def add_comment(self, user, content):
         return self.comment_set.create(
@@ -37,6 +40,9 @@ class Post(models.Model):
     @property
     def like_count(self):
         return self.like_users.count()
+
+    def __str__(self):
+        return '{} / {}'.format(self.author, self.created_date)
 
 
 class PostLike(models.Model):
@@ -59,6 +65,9 @@ class Comment(models.Model):
         through='CommentLike',
         related_name='like_comments'
     )
+
+    def __str__(self):
+        return '{}/{}'.format(self.post, self.author)
 
 
 class CommentLike(models.Model):

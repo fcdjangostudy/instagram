@@ -1,15 +1,20 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-{% for post in posts %}
-    <div>{{ post.id }}</div>
-{% endfor %}
-</body>
-</html>
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <a href="{% url 'post_create' %}">
+        <button>작성하기</button>
+    </a>
+
+    {% for post in posts %}
+        <div class="post"><a href="{% url 'post_detail' post.pk %}">
+            <img width="400" height="500" src="{{ post.photo.url }}" alt="">
+            <p>{{ post.id }}</p>
+            <p>{{ post.photo.url }}</p></a>
+
+            {% for comment in  post.comment_set.all|slice:'4' %}
+                <p>{{ comment.content }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+{% endblock %}

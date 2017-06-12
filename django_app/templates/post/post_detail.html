@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <p>작성자: {{ post.author }}</p>
+    <img src="{{ post.photo.url }}" alt="">
+    <p>작성일:{{ post.created_date }}</p>
+    <p>최종수정:{{ post.modified_date }}</p>
+    <p>좋아요:{{ post.like_users }}</p>
+    <p>테그:{{ post.tags }}</p>
+    <button class="btn"type="submit"><a href="{% url 'post_modify' post_pk=post.id %}">수정하기</a></button>
+    <form action="{% url 'post_delete' post_pk=post.id%}" method="POST">
+      {% csrf_token %}
+        <button class="btn" type="submit">삭제하기</button>
+    </form>
+{% endblock %}
