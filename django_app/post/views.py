@@ -1,5 +1,6 @@
-from django.conf import settings
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template import loader
 
 from member.models import User
 from .forms import PostCreate, PostModify
@@ -22,7 +23,13 @@ def post_list(request):
 def post_detail(request, post_pk):
     # post_pk에 해당하는 Post객체를 리턴, 보여줌
     post = get_object_or_404(Post, pk=post_pk)
-
+    # 구식 방식
+    # template = loader.get_template('post/post_detail.html')
+    # context = {
+    #     'post': post,
+    # }
+    # rendering_string = template.render(context=context, request=request)
+    # return HttpResponse(rendering_string)
     context = {
         'post': post
     }
@@ -46,7 +53,7 @@ def post_create(request):
                 author=author,
                 photo=photo,
             )
-            return redirect('post_list')
+            return redirect('post:post_list')
 
     else:
         form = PostCreate()
@@ -81,10 +88,10 @@ def post_delete(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     if request.method == 'POST':
         post.delete()
-        return redirect('post_list')
+        return redirect('post:post_list')
 
     elif request.method == 'GET':
-        return redirect('post_detail', post_pk=post.pk)
+        return redirect('post:post_detail', post_pk=post.pk)
 
 
 def comment_create(request, post_pk):
