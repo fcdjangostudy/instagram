@@ -12,7 +12,7 @@ from django.conf import settings
 
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
-    photo = models.ImageField(upload_to='css', blank=True)
+    photo = models.ImageField(upload_to='post', blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now_add=True)
     like_users = models.ManyToManyField(

@@ -1,27 +1,7 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-    <img src="{{ post.photo.url }}" alt="">
-    <div>작성자: {{ post.author }}</div>
 
-    <div>좋아요수:{{ post.like_count }}</div>
+    {% include 'include/post.html' %}
 
-    <div>댓글</div>
-    {% if post.comment_set.all %}
-        {% for comment in post.comment_set.all %}
-            <div>{{ comment.author }} : {{ comment.content }} - {{ comment.created_date }}</div>
-        {% endfor %}
-    {% else %}
-        <div>댓글이 없습니다</div>
-    {% endif %}
-
-    <div>작성일:{{ post.created_date }}</div>
-    <div>최종수정:{{ post.modified_date }}</div>
-
-    <p>테그:{{ post.tags }}</p>
-    <button class="btn" type="submit"><a href="{% url 'css:post_modify' post_pk=post.id %}">수정하기</a></button>
-    <form action="{% url 'css:post_delete' post_pk=post.id %}" method="POST">
-        {% csrf_token %}
-        <button class="btn" type="submit">삭제하기</button>
-    </form>
 {% endblock %}

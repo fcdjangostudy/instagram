@@ -1,21 +1,7 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-    <a href="{% url 'css:post_create' %}">
-        <button>작성하기</button>
-    </a>
-
     {% for post in posts %}
-        <div class="post">
-            <div>{{ post.author }}</div>
-            <a href="{% url 'css:post_detail' post.pk %}">
-                <img width="400px" height="auto" src="{{ post.photo.url }}" alt="">
-                <p>{{ post.photo.url }}</p></a>
-
-            {% for comment in  post.comment_set.all|slice:'4' %}
-                <p>{{ comment.content }}</p>
-            {% endfor %}
-        </div>
+        {% include 'include/post.html' %}
     {% endfor %}
-
 {% endblock %}
