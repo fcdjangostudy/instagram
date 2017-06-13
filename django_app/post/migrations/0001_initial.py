@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='post.Post')),
+                ('css', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='post.Post')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -62,12 +62,12 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.AddField(
-            model_name='post',
+            model_name='css',
             name='like_users',
             field=models.ManyToManyField(related_name='like_posts', through='post.PostLike', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='post',
+            model_name='css',
             name='tags',
             field=models.ManyToManyField(to='post.Tag'),
         ),
@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='comment',
-            name='post',
+            name='css',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='post.Post'),
         ),
     ]

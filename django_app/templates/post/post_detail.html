@@ -19,8 +19,8 @@
     <div>최종수정:{{ post.modified_date }}</div>
 
     <p>테그:{{ post.tags }}</p>
-    <button class="btn" type="submit"><a href="{% url 'post:post_modify' post_pk=post.id %}">수정하기</a></button>
-    <form action="{% url 'post:post_delete' post_pk=post.id %}" method="POST">
+    <button class="btn" type="submit"><a href="{% url 'css:post_modify' post_pk=post.id %}">수정하기</a></button>
+    <form action="{% url 'css:post_delete' post_pk=post.id %}" method="POST">
         {% csrf_token %}
         <button class="btn" type="submit">삭제하기</button>
     </form>

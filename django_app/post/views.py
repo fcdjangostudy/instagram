@@ -9,7 +9,7 @@ from .models import Post
 
 def post_list(request):
     # 모든 Post목록을 'posts'라는 key로 context에 담아 return render처리
-    # post/post_list.html을 template으로 사용하도록 한다
+    # css/post_list.html을 template으로 사용하도록 한다
 
     # 각 포스트에 대해 최대 4개까지의 댓글을 보여주도록 템플릿에 설정
     posts = Post.objects.all()
@@ -17,23 +17,23 @@ def post_list(request):
     context = {
         'posts': posts,
     }
-    return render(request, 'post/post_list.html', context)
+    return render(request, 'css/post_list.html', context)
 
 
 def post_detail(request, post_pk):
     # post_pk에 해당하는 Post객체를 리턴, 보여줌
     post = get_object_or_404(Post, pk=post_pk)
     # 구식 방식
-    # template = loader.get_template('post/post_detail.html')
+    # template = loader.get_template('css/post_detail.html')
     # context = {
-    #     'post': post,
+    #     'css': css,
     # }
     # rendering_string = template.render(context=context, request=request)
     # return HttpResponse(rendering_string)
     context = {
-        'post': post
+        'css': post
     }
-    return render(request, 'post/post_detail.html', context)
+    return render(request, 'css/post_detail.html', context)
 
 
 def post_create(request):
@@ -43,7 +43,7 @@ def post_create(request):
         context = {
             'form': form,
         }
-        return render(request, 'post/post_create.html', context)
+        return render(request, 'css/post_create.html', context)
     elif request.method == 'POST':
         form = PostCreate(request.POST, request.FILES)
         if form.is_valid():
@@ -53,14 +53,14 @@ def post_create(request):
                 author=author,
                 photo=photo,
             )
-            return redirect('post:post_list')
+            return redirect('css:post_list')
 
     else:
         form = PostCreate()
         context = {
             'form': form,
         }
-        return render(request, 'post/post_create.html', context)
+        return render(request, 'css/post_create.html', context)
 
 
 def post_modify(request, post_pk):
@@ -69,10 +69,10 @@ def post_modify(request, post_pk):
     if request.method == 'GET':
         form = PostModify()
         context = {
-            'post': post,
+            'css': post,
             'forms': form,
         }
-        return render(request, 'post/post_modify.html', context)
+        return render(request, 'css/post_modify.html', context)
     elif request.method == 'POST':
         form = PostModify(request.POST, request.FILES)
         if form.is_valid():
@@ -88,10 +88,10 @@ def post_delete(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     if request.method == 'POST':
         post.delete()
-        return redirect('post:post_list')
+        return redirect('css:post_list')
 
     elif request.method == 'GET':
-        return redirect('post:post_detail', post_pk=post.pk)
+        return redirect('css:post_detail', post_pk=post.pk)
 
 
 def comment_create(request, post_pk):
