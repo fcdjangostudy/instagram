@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import loader
@@ -6,6 +7,8 @@ from member.models import User
 from .forms import PostCreate, PostModify
 from .models import Post
 
+# 자동으로 Django에서 인증에 사용하는 User모데를래스를 리턴
+User = get_user_model()
 
 def post_list(request):
     # 모든 Post목록을 'posts'라는 key로 context에 담아 return render처리
@@ -38,29 +41,48 @@ def post_detail(request, post_pk):
 
 def post_create(request):
     # POST요청을 받아 Post객체를 생성 후 post_list페이지로 redirect
-    if request.method == 'GET':
-        form = PostCreate()
-        context = {
-            'form': form,
-        }
-        return render(request, 'post/post_create.html', context)
-    elif request.method == 'POST':
-        form = PostCreate(request.POST, request.FILES)
-        if form.is_valid():
-            author = User.objects.first()
-            photo = request.FILES['photo']
-            Post.objects.create(
-                author=author,
-                photo=photo,
-            )
-            return redirect('post:post_list')
+    # if request.method == 'GET':
+    #     form = PostCreate()
+    #     context = {
+    #         'form': form,
+    #     }
+    #     return render(request, 'post/post_create.html', context)
+    # elif request.method == 'POST':
+    #     form = PostCreate(request.POST, request.FILES)
+    #     if form.is_valid():
+    #         author = User.objects.first()
+    #         photo = request.FILES['photo']
+    #         Post.objects.create(
+    #             author=author,
+    #             photo=photo,
+    #         )
+    #         return redirect('post:post_list')
+    #
+    # else:
+    #     form = PostCreate()
+    #     context = {
+    #         'form': form,
+    #     }
+    #     return render(request, 'post/post_create.html', context)
+    if request.method == 'POST':
+        user = User.objects.first()
+        post = Post.objects.create(
+            author=user,
+            photo=request.FILES['file']
+        )
+        comment_string = request.POST.get('comment', '')
 
+        if comment_string:
+            post.comment_set.create(
+                author=user,
+                content=comment_string,
+            )
+        return redirect('post:post_detail', post_pk=post.pk)
     else:
-        form = PostCreate()
-        context = {
-            'form': form,
-        }
-        return render(request, 'post/post_create.html', context)
+
+        return render(request, 'post/post_create.html')
+
+
 
 
 def post_modify(request, post_pk):
